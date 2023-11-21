@@ -36,5 +36,3 @@ jobs:
         Write-Output "RDP Connection Information:"
         Write-Output "IP Address: $ipAddress"
         Write-Output "Port: $port"
-
-# Add any additional steps or adjustments as needed.
