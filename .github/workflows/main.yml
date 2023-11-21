@@ -16,8 +16,25 @@ jobs:
         Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp' -Name "UserAuthentication" -Value 1
         Set-LocalUser -Name "runneradmin" -Password (ConvertTo-SecureString -AsPlainText "P@ssw0rd!" -Force)
 
-    - name: Display IP
+    - name: Output IP Address
+      id: get-ip
       run: |
-        $ipAddress = (Test-Connection -ComputerName localhost -Count 1).IPAddressToString
+        $ipAddress = (Get-NetIPAddress -AddressFamily IPv4 -InterfaceAlias Ethernet | Where-Object { $_.IPv4Address -ne $null }).IPv4Address
         Write-Output "IP_ADDRESS=$ipAddress"
-        
+      shell: powershell
+
+    - name: Output Port
+      id: get-port
+      run: |
+        Write-Output "PORT=3389"
+      shell: powershell
+
+    - name: Display Connection Information
+      run: |
+        $ipAddress = ${{ env.IP_ADDRESS }}
+        $port = ${{ env.PORT }}
+        Write-Output "RDP Connection Information:"
+        Write-Output "IP Address: $ipAddress"
+        Write-Output "Port: $port"
+
+# Add any additional steps or adjustments as needed.
